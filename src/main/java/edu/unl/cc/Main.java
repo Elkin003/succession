@@ -42,8 +42,13 @@ public class Main {
                 break;
 
             case 2:
-                //ToDO
+                successionable = new CubedPrimeNumberCalculatorUpToLimit(limit);
                 break;
+
+            case 3:
+                successionable = new CubedPrimeNumberCalculatorUpToNTerms(limit);
+                break;
+
             case 4:
                 successionable = new EvenExponentPrimeNumberCalculatorUpToLimit(limit);
                 break;
