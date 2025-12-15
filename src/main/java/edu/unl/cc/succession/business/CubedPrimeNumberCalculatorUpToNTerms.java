@@ -1,10 +1,12 @@
 package edu.unl.cc.succession.business;
+
 import edu.unl.cc.succession.domain.Successionable;
 
 /**
- * Serie de primos elevados al cubo  hasta N términos (
- * S = 1^3 + 3^3 + 5^3 + 7^3 + 11^3 + 13^3 ...)
- * @autor Jose Salazar
+ * Serie de primos elevados al cubo hasta N términos
+ * S = 2^3 + 3^3 + 5^3 + 7^3 + 11^3 + 13^3 + ...
+ *
+ * @author Jose Salazar
  */
 
 public class CubedPrimeNumberCalculatorUpToNTerms implements Successionable {
@@ -17,7 +19,7 @@ public class CubedPrimeNumberCalculatorUpToNTerms implements Successionable {
     }
 
     public CubedPrimeNumberCalculatorUpToNTerms(Number start, Number limit) {
-        if (start.intValue() < 0){
+        if (start.intValue() < 0) {
             throw new IllegalArgumentException("Start must be greater than 0");
         }
         setLimit(limit);
@@ -25,12 +27,12 @@ public class CubedPrimeNumberCalculatorUpToNTerms implements Successionable {
         this.printableTerms = new StringBuilder("S = ");
     }
 
-    private Boolean isPrime(Integer number){
+    private Boolean isPrime(Integer number) {
         if (number < 2) {
             return false;
         }
-        for (int i = 2 ; i < number; i++){
-            if (number % i == 0){
+        for (int i = 2; i < number; i++) {
+            if (number % i == 0) {
                 return false;
             }
         }
@@ -40,7 +42,7 @@ public class CubedPrimeNumberCalculatorUpToNTerms implements Successionable {
     @Override
     public Number nextTerm(Number currentTerm) {
         currentTerm = currentTerm.intValue() + 1;
-        while (!isPrime(currentTerm.intValue())){
+        while (!isPrime(currentTerm.intValue())) {
             currentTerm = currentTerm.intValue() + 1;
         }
         return currentTerm;
@@ -48,7 +50,7 @@ public class CubedPrimeNumberCalculatorUpToNTerms implements Successionable {
 
     @Override
     public void setLimit(Number limit) {
-        if (limit.intValue() < 0){
+        if (limit.intValue() <= 0) {
             throw new IllegalArgumentException("Limit must be greater than 0");
         }
         this.limit = limit.intValue();
@@ -60,7 +62,7 @@ public class CubedPrimeNumberCalculatorUpToNTerms implements Successionable {
         int counterTerm = 0;
         int currentTerm = this.currentTerm > 0 ? this.currentTerm - 1 : 0;
 
-        while (counterTerm < limit){
+        while (counterTerm < limit) {
             currentTerm = nextTerm(currentTerm).intValue();
 
             this.printableTerms
@@ -76,6 +78,9 @@ public class CubedPrimeNumberCalculatorUpToNTerms implements Successionable {
 
     @Override
     public String print() {
+        if (printableTerms.length() > 4) {
+            printableTerms.setLength(printableTerms.length() - 3);
+        }
         return printableTerms.toString();
     }
 }

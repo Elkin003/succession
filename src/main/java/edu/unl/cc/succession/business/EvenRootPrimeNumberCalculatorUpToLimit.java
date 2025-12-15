@@ -3,8 +3,9 @@ package edu.unl.cc.succession.business;
 import edu.unl.cc.succession.domain.Successionable;
 
 /**
- * Serie de primos elevados a la raiz de numeros pares hasta un limite
- * (S = 1^(1/2) + 3^(1/4) + 5^(1/6) + 7^(1/8) + 11^(1/10) + 13^(1/12) ... + N):
+ * Serie de primos elevados a la raiz de numeros pares hasta un límite
+ * S = 2^(1/2) + 3^(1/4) + 5^(1/6) + 7^(1/8) + 11^(1/10) + 13^(1/12) ... + N
+ *
  * @author Leonel Lima (LMess)
  */
 public class EvenRootPrimeNumberCalculatorUpToLimit implements Successionable {
@@ -14,7 +15,7 @@ public class EvenRootPrimeNumberCalculatorUpToLimit implements Successionable {
     private StringBuilder printableTerms;
 
     public EvenRootPrimeNumberCalculatorUpToLimit(Number limit) {
-        this(0,limit);
+        this(0, limit);
     }
 
     public EvenRootPrimeNumberCalculatorUpToLimit(Number start, Number limit) {
@@ -22,7 +23,7 @@ public class EvenRootPrimeNumberCalculatorUpToLimit implements Successionable {
             throw new IllegalArgumentException("Start must be greater than 0");
         }
         setLimit(limit);
-        this.currentTerm = start.intValue();
+        this.currentTerm = nextTerm(start).intValue();
         this.printableTerms = new StringBuilder("S = ");
     }
 
@@ -40,7 +41,7 @@ public class EvenRootPrimeNumberCalculatorUpToLimit implements Successionable {
 
     @Override
     public void setLimit(Number limit) {
-        if (limit.intValue() < 0){
+        if (limit.intValue() <= 0) {
             throw new IllegalArgumentException("Limit must be greater than 0");
         }
         this.limit = limit.intValue();
@@ -49,7 +50,7 @@ public class EvenRootPrimeNumberCalculatorUpToLimit implements Successionable {
     @Override
     public Number nextTerm(Number currentTerm) {
         currentTerm = currentTerm.intValue() + 1;
-        while (!isPrime(currentTerm.intValue())){
+        while (!isPrime(currentTerm.intValue())) {
             currentTerm = currentTerm.intValue() + 1;
         }
         return currentTerm;
@@ -58,18 +59,14 @@ public class EvenRootPrimeNumberCalculatorUpToLimit implements Successionable {
     @Override
     public Number calculate() {
         double result = 0.0;
-        int counterTerm = 0;
-        int currentTerm = this.currentTerm > 0 ? this.currentTerm : 2;
+        int evenRootExponent = 2;
 
-        while (counterTerm < limit) {
-            currentTerm = nextTerm(currentTerm).intValue();
-            int evenRootExponent = (counterTerm * 2) + 2;
-            this.printableTerms.append(currentTerm).append("^(1/").append(evenRootExponent).append(")");
-            if (counterTerm < limit - 1) {
-                this.printableTerms.append(" + ");
-            }
+        while (currentTerm < limit) {
+            this.printableTerms.append(currentTerm).append("^(1/")
+                    .append(evenRootExponent).append(") + ");
             result += Math.pow(currentTerm, 1.0 / evenRootExponent);
-            counterTerm++;
+            currentTerm = nextTerm(currentTerm).intValue();
+            evenRootExponent += 2;
         }
         return result;
     }
@@ -77,6 +74,9 @@ public class EvenRootPrimeNumberCalculatorUpToLimit implements Successionable {
 
     @Override
     public String print() {
+        if (printableTerms.length() > 4) {
+            printableTerms.setLength(printableTerms.length() - 3);
+        }
         return printableTerms.toString();
     }
 
